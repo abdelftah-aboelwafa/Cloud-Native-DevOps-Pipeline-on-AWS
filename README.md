@@ -1,4 +1,4 @@
-# 🚀 End-to-End DevOps Project (Terraform + Ansible + Jenkins + EKS)
+# 🚀 End-to-End DevOps Project (Terraform + Ansible + Jenkins + EKS + Helm + Prometheus + Grafana )
 
 ## 📌 Overview
 
