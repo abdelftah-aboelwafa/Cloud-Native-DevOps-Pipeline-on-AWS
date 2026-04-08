@@ -1,0 +1,64 @@
+- name: Update apt
+  apt:
+    update_cache: yes
+
+- name: Install Java (Jenkins requirement)
+  apt:
+    name: openjdk-11-jdk
+    state: present
+
+- name: Install Jenkins dependencies
+  apt:
+    name:
+      - gnupg2
+      - curl
+      - unzip
+    state: present
+
+- name: Add Jenkins key
+  apt_key:
+    url: https://pkg.jenkins.io/debian-stable/jenkins.io.key
+    state: present
+
+- name: Add Jenkins repo
+  apt_repository:
+    repo: deb https://pkg.jenkins.io/debian-stable binary/
+    state: present
+
+- name: Update apt after adding Jenkins repo
+  apt:
+    update_cache: yes
+
+- name: Install Jenkins
+  apt:
+    name: jenkins
+    state: present
+
+- name: Set Jenkins HTTP port
+  lineinfile:
+    path: /etc/default/jenkins
+    regexp: '^HTTP_PORT='
+    line: "HTTP_PORT={{ jenkins_http_port | default('8080') }}"
+
+- name: Start and enable Jenkins
+  systemd:
+    name: jenkins
+    enabled: yes
+    state: started
+
+- name: Wait for Jenkins to be up on EC2
+  wait_for:            
+    port: "{{ jenkins_http_port | default('8080') }}"
+    timeout: 120
+
+
+    ### to get initialAdminPassword for fisrt sing in to jenkins ###
+
+- name: Show initial Jenkins admin password
+  slurp:
+    src: /var/lib/jenkins/secrets/initialAdminPassword
+  register: jenkins_password
+
+- name: Print initial Jenkins admin password
+  debug:
+    msg: "{{ jenkins_password.content | b64decode }}" 

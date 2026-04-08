@@ -1,0 +1,19 @@
+---
+- name: Ensure Docker is installed
+  include_role:
+    name: docker
+  become: true
+
+- name: Pull SonarQube Docker image
+  community.docker.docker_image:
+    name: "{{ docker_image }}"
+    source: pull
+
+- name: Run SonarQube container
+  community.docker.docker_container:
+    name: "{{ container_name }}"
+    image: "{{ docker_image }}"
+    state: started
+    restart_policy: always
+    published_ports: "{{ ports }}"
+    env: "{{ env }}"

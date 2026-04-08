@@ -1,0 +1,39 @@
+- name: Ensure monitoring namespace exists
+  kubernetes.core.k8s:
+    api_version: v1
+    kind: Namespace
+    name: "{{ monitoring_namespace }}"
+    state: present
+    kubeconfig: "{{ kubeconfig_path }}"
+
+- name: Add Prometheus Helm repo
+  community.kubernetes.helm_repository:
+    name: prometheus-community
+    repo_url: "{{ prometheus_repo }}"
+
+- name: Install Prometheus via Helm
+  community.kubernetes.helm:
+    name: "{{ prometheus_release_name }}"
+    chart_ref: prometheus-community/kube-prometheus-stack
+    namespace: "{{ monitoring_namespace }}"
+    create_namespace: true
+    release_state: present
+    kubeconfig: "{{ kubeconfig_path }}"
+
+- name: Add Grafana Helm repo
+  community.kubernetes.helm_repository:
+    name: grafana
+    repo_url: "{{ grafana_repo }}"
+
+- name: Install Grafana via Helm
+  community.kubernetes.helm:
+    name: "{{ grafana_release_name }}"
+    chart_ref: grafana/grafana
+    namespace: "{{ monitoring_namespace }}"
+    create_namespace: true
+    release_state: present
+    kubeconfig: "{{ kubeconfig_path }}"
+
+- name: Node Exporter note
+  debug:
+    msg: "Node Exporter will be installed automatically with kube-prometheus-stack"

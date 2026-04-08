@@ -1,0 +1,14 @@
+- hosts: ec2
+  become: true
+  roles:
+    - docker
+    - sonar-in-docker
+    - trivy
+    - jenkins
+    - jenkins_pluging
+
+- hosts: eks_nodes
+  become: true
+  roles:
+    - helm-kubectl
+    - prometheus-grafana

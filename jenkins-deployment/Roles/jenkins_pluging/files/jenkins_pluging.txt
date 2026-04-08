@@ -1,0 +1,44 @@
+# NodeJS
+nodejs
+
+# Docker
+docker-workflow                # Docker Pipelines
+docker-commons                # Common utilities for Docker
+docker-plugin                  # Docker integration
+workflow-job
+workflow-aggregator
+pipeline-model-definition
+pipeline-stage-view
+credentials
+credentials-binding
+cloudbees-folder
+
+# SonarQube
+sonar
+analysis-core
+display-url-api
+token-macro
+scm-api
+matrix-project
+parameterized-trigger
+
+# Git
+git
+git-client
+git-server
+
+# Blue Ocean
+blueocean
+blueocean-dashboard
+blueocean-pipeline-editor
+blueocean-personalization
+blueocean-pipeline-scm-api
+
+# General pipeline dependencies
+pipeline-model-api
+workflow-cps
+workflow-cps-global-lib
+workflow-support
+structs
+apache-httpcomponents-client-4-api
+jackson2-api

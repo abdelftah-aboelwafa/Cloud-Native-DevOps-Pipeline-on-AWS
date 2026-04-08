@@ -1,0 +1,25 @@
+- name: Install dependencies
+  apt:
+    name: [wget, apt-transport-https, gnupg]
+    state: present
+    update_cache: yes
+  become: true
+
+- name: Download Trivy latest release for Ubuntu
+  get_url:
+    url: https://github.com/aquasecurity/trivy/releases/latest/download/trivy_0.44.0_Linux-64bit.deb
+    dest: /tmp/trivy.deb
+    mode: '0644'
+
+- name: Install Trivy
+  apt:
+    deb: /tmp/trivy.deb
+  become: true
+
+- name: Verify installation
+  command: trivy --version
+  register: trivy_version
+  changed_when: false
+
+- debug:
+    msg: "{{ trivy_version.stdout }}"

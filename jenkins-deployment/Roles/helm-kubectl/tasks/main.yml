@@ -1,0 +1,22 @@
+---
+- name: Install kubectl
+  shell: |
+    curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+    install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+  args:
+    creates: /usr/local/bin/kubectl
+
+- name: Install Helm
+  shell: |
+    curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+  args:
+    creates: /usr/local/bin/helm
+
+- name: Add Prometheus Helm repo
+  shell: helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+
+- name: Add Grafana Helm repo
+  shell: helm repo add grafana https://grafana.github.io/helm-charts
+
+- name: Update Helm repos
+  shell: helm repo update
