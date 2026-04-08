@@ -13,14 +13,16 @@ EOF
 resource "time_sleep" "wait_for_ec2" {
   depends_on = [module.ec2]
 
-  create_duration = "30s"
+  create_duration = "60s"
 }
 
 resource "null_resource" "run_ansible" {
   depends_on = [
-  module.ec2,
-  local_file.inventory
-]
+    module.ec2,
+    module.eks,           
+   local_file.inventory
+  ]
+
   provisioner "local-exec" {
     command = "ansible-playbook -i ../jenkins_deployment/inventory.ini ../jenkins_deployment/playbook.yml"
   }
